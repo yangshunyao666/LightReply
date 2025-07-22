@@ -1,0 +1,11 @@
+{
+    "rules": [
+        {
+            "description": "tst",
+            "url": "bilibili",
+            "match_type": "contains",
+            "modify_type": "response",
+            "content": "<p>114514</p>"
+        }
+    ]
+}
