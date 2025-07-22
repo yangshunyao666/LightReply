@@ -19,7 +19,7 @@ import mistune
 from tkinter import font, StringVar
 import re
 
-VERSION = "Alpha_4.5_am"
+VERSION = "2.1"
 
 class CertManager:
     @staticmethod
@@ -157,15 +157,15 @@ class GUI(ttk.Window):
             "morph", "journal", "simplex", "solar", "superhero"
         ]
         
-        super().__init__(themename="darkly")
-        self.title(f"LightReply {VERSION}")
+        super().__init__(themename="flatly")
+        self.title(f"LightReply  V.{VERSION}")
         self.geometry("800x600")
         
         self.proxy_manager = ProxyManager()
         self.config = ProxyConfig()
         
         # 主题变量
-        self.current_theme = StringVar(value="darkly")
+        self.current_theme = StringVar(value="flatly")
         self.current_theme.trace_add("write", self.change_theme)
         
         self.create_widgets()
@@ -209,7 +209,7 @@ class GUI(ttk.Window):
         # 帮助菜单
         help_menu = ttk.Menu(self.menubar, tearoff=0)
         self.menubar.add_cascade(label="帮助", menu=help_menu)
-        help_menu.add_command(label="使用说明", command=self.show_readme)
+        help_menu.add_command(label="使用说明&关于", command=self.show_readme)
         
         # 创建主框架
         main_frame = ttk.Frame(self)
@@ -254,7 +254,7 @@ class GUI(ttk.Window):
         # 右侧按钮
         self.help_btn = ttk.Button(
             right_buttons,
-            text="使用说明",
+            text="使用说明&关于",
             command=self.show_readme,
             bootstyle="primary-outline",  # 改用主要颜色以提高辨识度
             width=12
@@ -359,21 +359,22 @@ class GUI(ttk.Window):
         # 如果代理正在运行，重新加载代理的配置
         if self.proxy_running and hasattr(self, 'addon'):
             self.addon.config.load_config()
-            Messagebox.show_info("成功", "配置已刷新")
+            Messagebox.show_info("配置已刷新", "成功")
         else:
-            Messagebox.show_info("成功", "配置已刷新（代理未运行）")
+            Messagebox.show_info("配置已刷新（代理未运行）", "成功")
 
     def show_readme(self):
         """显示使用说明"""
-        dialog = ReadmeDialog(self)
-        dialog.focus()  # 设置焦点到说明窗口
+        Messagebox.show_info('===================LightReply2===================\n\n目的很简单，我在破解一款程序时发下它会检测抓包软件，所以就写了\n首先，这是claude3.5写的，因为我试了1个星期发现我还是写不好\n这个我也调了很久，希望能有点用\n如果反应较好的话我还会搞个LightProxy，整合一下各个抓包软件的功能\n\n======================说明======================\n\n首先添加规则，exact完全匹配，prefix前缀匹配，contains包含匹配，和http debugger自动回复一样的\n然后是证书安装，记得用start.bat打开后用，不过建议用setup.bat，这里只是做上以备不时之需', '说明')
+        #dialog = ReadmeDialog(self)
+        #dialog.focus()  # 设置焦点到说明窗口
         
     def install_certificate(self):
         """安装HTTPS证书"""
         if CertManager.install_cert():
-            Messagebox.show_info("证书安装", "证书安装成功！")
+            Messagebox.show_info("证书安装成功！", "证书安装")
         else:
-            Messagebox.show_error("证书安装", "证书安装失败，请查看控制台输出了解详细信息")
+            Messagebox.show_error("证书安装失败，注意，此功能需要管理员权限，请查看控制台输出了解详细信息", "证书安装")
 
     def start_proxy(self):
         try:
@@ -426,16 +427,16 @@ class GUI(ttk.Window):
                 self.proxy_running = True
                 self.proxy_btn.configure(state="disabled")
                 # 停止按钮始终保持可用状态
-                Messagebox.show_info("代理已启动", "系统代理已设置成功")
+                Messagebox.show_info("系统代理已设置成功", "提示")
             else:
-                Messagebox.show_error("系统提示", "无法设置系统代理")
+                Messagebox.show_error("无法设置系统代理", "提示")
         except Exception as e:
             error_msg = str(e)
             print(f"启动代理时出错：{error_msg}")
             print("详细错误信息：")
             import traceback
             traceback.print_exc()
-            Messagebox.show_error("系统提示", "启动代理失败，请查看控制台输出了解详细信息")
+            Messagebox.show_error("启动代理失败，请查看控制台输出了解详细信息", "提示")
 
     def stop_proxy(self):
         try:
@@ -463,14 +464,14 @@ class GUI(ttk.Window):
             self.proxy_running = False
             self.proxy_btn.configure(state="normal")
             # 停止按钮始终保持可用状态
-            Messagebox.show_info("代理已停止", "系统代理已恢复默认设置")
+            Messagebox.show_info("系统代理已恢复", "提示")
         except Exception as e:
             error_msg = str(e)
             print(f"停止代理时出错：{error_msg}")
             print("详细错误信息：")
             import traceback
             traceback.print_exc()
-            Messagebox.show_error("系统提示", "停止代理失败，请查看控制台输出了解详细信息")
+            Messagebox.show_error("停止代理失败，请查看控制台输出了解详细信息", "提示")
 
     def update_rules_display(self):
         for item in self.tree.get_children():
@@ -499,10 +500,10 @@ class GUI(ttk.Window):
     def delete_rule(self):
         selected = self.tree.selection()
         if not selected:
-            Messagebox.show_warning("警告", "请先选择要删除的规则")
+            Messagebox.show_warning("请先选择要删除的规则", "警告")
             return
             
-        if Messagebox.show_question("确认", "确定要删除选中的规则吗？"):
+        if Messagebox.show_question("确定要删除选中的规则吗？", "确认"):
             for item in selected:
                 idx = self.tree.index(item)
                 del self.config.rules[idx]
@@ -512,7 +513,7 @@ class GUI(ttk.Window):
     def edit_rule(self):
         selected = self.tree.selection()
         if not selected:
-            Messagebox.show_warning("警告", "请先选择要修改的规则")
+            Messagebox.show_warning("请先选择要修改的规则", "警告")
             return
             
         # 只修改第一个选中的规则

@@ -1,9 +1,6 @@
 @echo off
 chcp 65001 >nul
 
-echo 注意：本人copilot额度已达到上限，8月才能继续优化与完善，所以有可能出现奇怪的问题！如果遇到问题请使用start_debug.bat获取报错并提交github issues！
-echo 按下回车以运行
-pause
 :: Try to run with admin privileges
 if not "%1"=="am_admin" (
     powershell -Command "Start-Process -Verb RunAs -FilePath '%0' -ArgumentList 'am_admin'"

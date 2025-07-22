@@ -1,6 +1,5 @@
-# 欢迎使用 LightReply
-### 请注意，我是用copilot写的，7月额度用完了，8月才会更新，还有很多功能没做，很多bug和观感没优化，所以就ai介绍了，完工后会好好写一个readme的，谢谢支持！
-# LightReply Alpha_4.5_am
+# LightReply2.1
+### 请注意，我是用copilot写的，7月额度用完了，8月才会更新，还有很多功能没做，很多bug和观感没优化,谢谢支持！
 
 LightReply 是一个强大的HTTP/HTTPS请求拦截和修改工具，类似于HTTP Debugger的自动回复功能。
 
@@ -19,19 +18,24 @@ LightReply 是一个强大的HTTP/HTTPS请求拦截和修改工具，类似于HT
 ## 安装依赖
 
 ```bash
-pip install mitmproxy ttkbootstrap pywin32
+.\setup.bat
 ```
-
+或直接双击运行
 ## 使用方法
 
 1. 运行主程序：
    ```bash
-   python LightReply.py
+   python LightReply.py #不推荐
    ```
-
+或
+   ```bash
+   .\start.bat #推荐，有管理员权限
+   ```
+或直接双击运行
 2. 点击"启动代理"按钮开始拦截
 3. 使用界面添加、编辑或删除规则
 4. 规则会自动保存到config.json文件中
+5. 记得点刷新规则来立即生效！
 
 ## 配置文件格式
 
@@ -52,11 +56,6 @@ config.json示例：
 
 ## 注意事项
 
-1. 首次使用时需要安装mitmproxy的证书
+1. 首次使用时需要安装mitmproxy的证书（使用setup.bat即可）
 2. 程序会自动设置系统代理
 3. 关闭程序时会自动恢复系统代理设置
-
-## 安全提示
-
-请谨慎使用HTTPS拦截功能，不要在不信任的环境中使用。
-
